@@ -1,4 +1,3 @@
----Pull in the wezterm API
 ---@module 'wezterm'
 ---@type Wezterm
 local Wezterm = require('wezterm')
@@ -77,7 +76,7 @@ end)
 -- config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
 
 -- Change mouse behaviour for links
-config.mouse_bindings = --[[@as (MouseBindingBase[])]]{
+config.mouse_bindings = {
   -- Ctrl+Left-click will open the link under the mouse cursor
   {
     event = {
