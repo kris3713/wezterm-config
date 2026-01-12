@@ -1,4 +1,5 @@
----@module 'wezterm'
+--- @diagnostic disable: undefined-field
+
 ---@type Wezterm
 local Wezterm = require('wezterm')
 
@@ -51,10 +52,13 @@ config.colors = {
 
 -- config.window_decorations = 'NONE'
 
+-- Enable scrollbar
+config.enable_scroll_bar = true
+
 -- Window padding
 config.window_padding = {
-  left = '2px',
-  right = '1px',
+  left = '3px',
+  right = '3px',
   top = 0,
   bottom = 0
 }
@@ -68,7 +72,7 @@ config.cursor_thickness = 1.5
 local mux = Wezterm.mux
 Wezterm.on('gui-startup', function(cmd)
   ---@diagnostic disable-next-line: unused-local
-  local tab, pane, window = mux.spawn_window(cmd or {})
+  local _, _, window = mux.spawn_window(cmd or {})
   window:gui_window():maximize()
 end)
 
@@ -139,18 +143,29 @@ config.mouse_bindings = {
     },
     action = action.ScrollByLine(1)
   }
-}
+} --[[@as (MouseBindingBase[])]]
 
 -- Set leader key bindings
 config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
 
 config.keys = {
   -- Change paste behaviour's to paste from the primary selection.
-  { key = 'V', mods = 'CTRL', action = action.PasteFrom 'PrimarySelection' },
+  {
+    key = 'V',
+    mods = 'CTRL',
+    action = action.PasteFrom('PrimarySelection')
+  },
   -- Toggle Fullscreen with F11
-  { key = 'F11', action = action.ToggleFullScreen },
+  {
+    key = 'F11',
+    action = action.ToggleFullScreen
+  },
   -- Disable Alt+Enter
-  { key = 'Enter', mods = 'ALT', action = action.Nop },
+  {
+    key = 'Enter',
+    mods = 'ALT',
+    action = action.Nop
+  },
   -- Add a keybind for splitting the current pane horizontally
   {
     key = '\\',
@@ -185,10 +200,7 @@ config.keys = {
     mods = 'LEADER',
     action = action { EmitEvent = 'restore_session' }
   }
-}
-
--- Enable scrollbar
-config.enable_scroll_bar = true
+} --[[@as (Key[])]]
 
 -- and finally, return the configuration to wezterm
 return config
