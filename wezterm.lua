@@ -99,7 +99,7 @@ config.mouse_bindings = {
     mods = 'NONE',
     action = action.Nop
   },
-  -- Mouse binding for scrolling by one (1) line while holding CTRL
+  -- Mouse binding for scrolling by 3 lines while holding CTRL
   {
     event = {
       Down = {
@@ -108,7 +108,7 @@ config.mouse_bindings = {
       }
     },
     mods = 'CTRL',
-    action = action.ScrollByLine(-1)
+    action = action.ScrollByLine(-3)
   },
   {
     event = {
@@ -118,6 +118,25 @@ config.mouse_bindings = {
       }
     },
     mods = 'CTRL',
+    action = action.ScrollByLine(3)
+  },
+  -- Mouse binding for scrolling by one (1)
+  {
+    event = {
+      Down = {
+        streak = 1,
+        button = { WheelUp = 1 }
+      }
+    },
+    action = action.ScrollByLine(-1)
+  },
+  {
+    event = {
+      Down = {
+        streak = 1,
+        button = { WheelDown = 1 }
+      }
+    },
     action = action.ScrollByLine(1)
   }
 }
