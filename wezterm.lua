@@ -1,6 +1,3 @@
---- @diagnostic disable: undefined-field
-
---- @diagnostic disable-next-line: assign-type-mismatch
 ---@type Wezterm
 local Wezterm = require('wezterm')
 
@@ -150,6 +147,14 @@ config.mouse_bindings = {
 config.leader = { key = 'a', mods = 'CTRL|SHIFT', timeout_milliseconds = 2000 }
 
 config.keys = {
+  -- {
+  --   key = 'Backspace',
+  --   mods = 'CTRL',
+  --   action = action.SendKey {
+  --     key = 'w',
+  --     mods = 'CTRL'
+  --   }
+  -- },
   -- Change paste behaviour's to paste from the primary selection.
   {
     key = 'V',
