@@ -1,32 +1,18 @@
 ---@type Wezterm
-local Wezterm = require('wezterm')
+local wezterm = require('wezterm')
+local wezterm_font = wezterm.font
+
+-- Wezterm config
+local config = wezterm.config_builder()
 
 -- Wezterm actions
-local action = Wezterm.action
-
--- Session manager
-local session_manager = require('wezterm-session-manager/session-manager')
-
-Wezterm.on('save_session', function(window)
-  session_manager.save_state(window)
-end)
-
-Wezterm.on('load_session', function(window)
-  session_manager.load_state(window)
-end)
-
-Wezterm.on('restore_session', function(window)
-  session_manager.restore_state(window)
-end)
-
--- This will hold the configuration.
-local config = Wezterm.config_builder()
+local action = wezterm.action
 
 -- Change the color scheme:
 config.color_scheme = 'Catppuccin Macchiato'
 
 -- Change the default font
-config.font = Wezterm.font('JetbrainsMono Nerd Font')
+config.font = wezterm_font('JetbrainsMono Nerd Font')
 config.font_size = 14.0
 
 -- Change the window height and width
@@ -35,7 +21,7 @@ config.initial_cols = 125
 
 -- Change window tab-bar appearance
 config.window_frame = {
-  font = Wezterm.font { family = 'Adwaita Sans' },
+  font = wezterm_font { family = 'Adwaita Sans' },
   font_size = 11.0,
   active_titlebar_bg = '#333333',
   inactive_titlebar_bg = '#333333'
@@ -67,12 +53,12 @@ config.cursor_thickness = 1.5
 -- config.cursor_blink_rate = 800
 
 -- Set to maximized window on start
-local mux = Wezterm.mux
-Wezterm.on('gui-startup', function(cmd)
+local mux = wezterm.mux
+wezterm.on('gui-startup', function(cmd)
   ---@diagnostic disable-next-line: unused-local
   local _, _, window = mux.spawn_window(cmd or {})
   window:gui_window():maximize()
-end)
+end --[[@param cmd SpawnCommand?]])
 
 -- -- Use integrated blank in the status bar
 -- config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
@@ -141,10 +127,7 @@ config.mouse_bindings = {
     },
     action = action.ScrollByLine(1)
   }
-} --[[@as (MouseBindingBase[])]]
-
--- Set leader key bindings
-config.leader = { key = 'a', mods = 'CTRL|SHIFT', timeout_milliseconds = 2000 }
+} --[[@as (MouseBinding[])]]
 
 config.keys = {
   -- {
@@ -171,40 +154,6 @@ config.keys = {
     key = 'Enter',
     mods = 'ALT',
     action = action.Nop
-  },
-  -- Add a keybind for splitting the current pane horizontally
-  {
-    key = '\\',
-    mods = 'LEADER',
-    action = action.SplitHorizontal { domain = 'CurrentPaneDomain' },
-  },
-  -- Add a keybind for splitting the current pane vertically
-  {
-    key = '-',
-    mods = 'LEADER',
-    action = action.SplitVertical { domain = 'CurrentPaneDomain' },
-  },
-  -- Send 'CTRL-A' to the terminal when pressing CTRL-A, CTRL-A
-  {
-    key = 'a',
-    mods = 'LEADER|CTRL',
-    action = action.SendKey { key = 'a', mods = 'CTRL' },
-  },
-  -- Session manager keybinds
-  {
-    key = 'S',
-    mods = 'LEADER',
-    action = action { EmitEvent = 'save_session' }
-  },
-  {
-    key = 'L',
-    mods = 'LEADER',
-    action = action { EmitEvent = 'load_session' }
-  },
-  {
-    key = 'R',
-    mods = 'LEADER',
-    action = action { EmitEvent = 'restore_session' }
   }
 } --[[@as (Key[])]]
 
