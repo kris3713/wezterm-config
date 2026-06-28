@@ -1,5 +1,5 @@
 ---@diagnostic disable: missing-fields
----@type Wezterm
+
 local wezterm = require('wezterm')
 
 -- Wezterm font
@@ -56,14 +56,29 @@ config.default_cursor_style = 'BlinkingBar'
 config.cursor_thickness = 1.5
 -- config.cursor_blink_rate = 800
 
--- Set to maximized window on start
+-- Wezterm multiplexer
 local mux = wezterm.mux
+
+-- Set to maximized window on start
 wezterm.on('gui-startup', function(cmd)
   ---@diagnostic disable-next-line: unused-local
   local _, _, window = mux.spawn_window(cmd or {})
   window:gui_window():maximize()
-end --[[@param cmd SpawnCommand?]])
+end)
 
+-- Hide the scrollbar when there is no scrollback or alternate screen is active
+wezterm.on('update-status', function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  local dimensions = pane:get_dimensions()
+
+  -- Enable scrollbar only if:
+  -- 1. There is more content in the scrollback than fits in the viewport
+  -- 2. The alternate screen (used by Neovim, Bat, etc.) is NOT active
+  overrides.enable_scroll_bar = dimensions.scrollback_rows > dimensions.viewport_rows
+    and not pane:is_alt_screen_active()
+
+  window:set_config_overrides(overrides)
+end)
 -- -- Increase zoom at startup
 -- wezterm.on('gui-startup', function(cmd)
 --   action.IncreaseFontSize
