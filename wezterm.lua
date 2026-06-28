@@ -29,9 +29,6 @@ wezterm_on('update-status', function(window, pane)
   window:set_config_overrides(overrides)
 end)
 
--- Wezterm config
-local config = Wezterm.config_builder()
-
 -- Wezterm font
 local wezterm_font = Wezterm.font
 
