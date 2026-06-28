@@ -1,15 +1,42 @@
 ---@diagnostic disable: missing-fields
 
-local wezterm = require('wezterm')
+local Wezterm = require('wezterm')
 
--- Wezterm font
-local wezterm_font = wezterm.font
+-- Declared event handler
+local wezterm_on = Wezterm.on
+
+-- Wezterm multiplexer
+local mux = Wezterm.mux
+
+-- Set to maximized window on start
+wezterm_on('gui-startup', function(cmd)
+  ---@diagnostic disable-next-line: unused-local
+  local _, _, window = mux.spawn_window(cmd or {})
+  window:gui_window():maximize()
+end)
+
+-- Hide the scrollbar when there is no scrollback or alternate screen is active
+wezterm_on('update-status', function(window, pane)
+  local overrides = window:get_config_overrides() or {}
+  local dimensions = pane:get_dimensions()
+
+  -- Enable scrollbar only if:
+  -- 1. There is more content in the scrollback than fits in the viewport
+  -- 2. The alternate screen (used by Neovim, Bat, etc.) is NOT active
+  overrides.enable_scroll_bar = (dimensions.scrollback_rows > dimensions.viewport_rows)
+    and not pane:is_alt_screen_active()
+
+  window:set_config_overrides(overrides)
+end)
 
 -- Wezterm config
-local config = wezterm.config_builder()
+local config = Wezterm.config_builder()
+
+-- Wezterm font
+local wezterm_font = Wezterm.font
 
 -- Wezterm actions
-local action = wezterm.action
+local action = Wezterm.action
 
 -- Change the color scheme:
 config.color_scheme = 'Catppuccin Macchiato'
@@ -55,34 +82,6 @@ config.window_padding = {
 config.default_cursor_style = 'BlinkingBar'
 config.cursor_thickness = 1.5
 -- config.cursor_blink_rate = 800
-
--- Wezterm multiplexer
-local mux = wezterm.mux
-
--- Set to maximized window on start
-wezterm.on('gui-startup', function(cmd)
-  ---@diagnostic disable-next-line: unused-local
-  local _, _, window = mux.spawn_window(cmd or {})
-  window:gui_window():maximize()
-end)
-
--- Hide the scrollbar when there is no scrollback or alternate screen is active
-wezterm.on('update-status', function(window, pane)
-  local overrides = window:get_config_overrides() or {}
-  local dimensions = pane:get_dimensions()
-
-  -- Enable scrollbar only if:
-  -- 1. There is more content in the scrollback than fits in the viewport
-  -- 2. The alternate screen (used by Neovim, Bat, etc.) is NOT active
-  overrides.enable_scroll_bar = dimensions.scrollback_rows > dimensions.viewport_rows
-    and not pane:is_alt_screen_active()
-
-  window:set_config_overrides(overrides)
-end)
--- -- Increase zoom at startup
--- wezterm.on('gui-startup', function(cmd)
---   action.IncreaseFontSize
--- end --[[@param cmd SpawnCommand?]])
 
 -- -- Use integrated blank in the status bar
 -- config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
