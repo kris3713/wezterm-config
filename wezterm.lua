@@ -8,7 +8,7 @@ local wezterm_on = Wezterm.on
 -- Wezterm multiplexer
 local mux = Wezterm.mux
 
--- Set to maximized window on start
+-- Maximize window on start
 wezterm_on('gui-startup', function(cmd)
   ---@diagnostic disable-next-line: unused-local
   local _, _, window = mux.spawn_window(cmd or {})
@@ -37,6 +37,9 @@ local wezterm_font = Wezterm.font
 
 -- Wezterm actions
 local action = Wezterm.action
+
+-- Wezterm config
+local config = Wezterm.config_builder()
 
 -- Change the color scheme:
 config.color_scheme = 'Catppuccin Macchiato'
