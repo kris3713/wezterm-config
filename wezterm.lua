@@ -21,7 +21,7 @@ config.use_resize_increments = true
 
 -- Change the window height and width
 config.initial_rows = 24
-config.initial_cols = 125
+config.initial_cols = 124
 
 -- Change window tab-bar appearance
 config.window_frame = {
@@ -47,7 +47,7 @@ config.enable_scroll_bar = true
 config.window_padding = {
   left = '3px',
   right = '3px',
-  top = 0,
+  top = 1.0,
   bottom = 0,
 }
 
