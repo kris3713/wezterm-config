@@ -1,5 +1,8 @@
+---@diagnostic disable: missing-fields
 ---@type Wezterm
 local wezterm = require('wezterm')
+
+-- Wezterm font
 local wezterm_font = wezterm.font
 
 -- Wezterm config
@@ -13,7 +16,8 @@ config.color_scheme = 'Catppuccin Macchiato'
 
 -- Change the default font
 config.font = wezterm_font('JetbrainsMono Nerd Font')
-config.font_size = 14.0
+config.font_size = 14.5
+config.use_resize_increments = true
 
 -- Change the window height and width
 config.initial_rows = 24
@@ -21,17 +25,17 @@ config.initial_cols = 125
 
 -- Change window tab-bar appearance
 config.window_frame = {
-  font = wezterm_font { family = 'Adwaita Sans' },
-  font_size = 11.0,
+  font = wezterm_font({ family = 'Adwaita Sans' }),
+  font_size = 11.2,
   active_titlebar_bg = '#333333',
-  inactive_titlebar_bg = '#333333'
+  inactive_titlebar_bg = '#333333',
 }
 
 config.colors = {
   tab_bar = {
     -- The color of the inactive tab bar edge/divider
-    inactive_tab_edge = '#575757'
-  }
+    inactive_tab_edge = '#575757',
+  },
 }
 
 -- config.window_decorations = 'NONE'
@@ -44,7 +48,7 @@ config.window_padding = {
   left = '3px',
   right = '3px',
   top = 0,
-  bottom = 0
+  bottom = 0,
 }
 
 -- Change cursor style
@@ -60,6 +64,11 @@ wezterm.on('gui-startup', function(cmd)
   window:gui_window():maximize()
 end --[[@param cmd SpawnCommand?]])
 
+-- -- Increase zoom at startup
+-- wezterm.on('gui-startup', function(cmd)
+--   action.IncreaseFontSize
+-- end --[[@param cmd SpawnCommand?]])
+
 -- -- Use integrated blank in the status bar
 -- config.window_decorations = 'INTEGRATED_BUTTONS | RESIZE'
 
@@ -70,63 +79,63 @@ config.mouse_bindings = {
     event = {
       Up = {
         streak = 1,
-        button = 'Left'
-      }
+        button = 'Left',
+      },
     },
     mods = 'CTRL',
-    action = action.OpenLinkAtMouseCursor
+    action = action.OpenLinkAtMouseCursor,
   },
   -- Disable opening links with just left click
   {
     event = {
       Up = {
         streak = 1,
-        button = 'Left'
-      }
+        button = 'Left',
+      },
     },
     mods = 'NONE',
-    action = action.Nop
+    action = action.Nop,
   },
   -- Mouse binding for scrolling by 3 lines while holding CTRL
   {
     event = {
       Down = {
         streak = 1,
-        button = { WheelUp = 1 }
-      }
+        button = { WheelUp = 1 },
+      },
     },
     mods = 'CTRL',
-    action = action.ScrollByLine(-3)
+    action = action.ScrollByLine(-3),
   },
   {
     event = {
       Down = {
         streak = 1,
-        button = { WheelDown = 1 }
-      }
+        button = { WheelDown = 1 },
+      },
     },
     mods = 'CTRL',
-    action = action.ScrollByLine(3)
+    action = action.ScrollByLine(3),
   },
   -- Mouse binding for scrolling by one (1)
   {
     event = {
       Down = {
         streak = 1,
-        button = { WheelUp = 1 }
-      }
+        button = { WheelUp = 1 },
+      },
     },
-    action = action.ScrollByLine(-1)
+    action = action.ScrollByLine(-1),
   },
   {
     event = {
       Down = {
         streak = 1,
-        button = { WheelDown = 1 }
-      }
+        button = { WheelDown = 1 },
+      },
     },
-    action = action.ScrollByLine(1)
-  }
+    action = action.ScrollByLine(1),
+  },
 } --[[@as (MouseBinding[])]]
 
 config.keys = {
@@ -142,19 +151,19 @@ config.keys = {
   {
     key = 'V',
     mods = 'CTRL',
-    action = action.PasteFrom('PrimarySelection')
+    action = action.PasteFrom('PrimarySelection'),
   },
   -- Toggle Fullscreen with F11
   {
     key = 'F11',
-    action = action.ToggleFullScreen
+    action = action.ToggleFullScreen,
   },
   -- Disable Alt+Enter
   {
     key = 'Enter',
     mods = 'ALT',
-    action = action.Nop
-  }
+    action = action.Nop,
+  },
 } --[[@as (Key[])]]
 
 -- and finally, return the configuration to wezterm
